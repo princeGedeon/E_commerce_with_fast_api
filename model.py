@@ -1,8 +1,9 @@
+import pydantic
 from datetime import datetime
 
 from tortoise import Model, fields
 from pydantic import BaseModel
-
+from tortoise.contrib.pydantic import pydantic_model_creator
 class User(Model):
     id=fields.IntField(pk=True,index=True)
     username=fields.CharField(max_length=20,null=False)
@@ -11,7 +12,7 @@ class User(Model):
     is_verified=fields.BooleanField(default=False)
     join_data=fields.DatetimeField(default=datetime.utcnow)
 
-class Busness(Model):
+class Business(Model):
     id=fields.IntField(pk=True,index=True)
     name=fields.CharField(max_length=20,null=False,unique=True)
     city=fields.CharField(max_length=100,null=False,default="Non spécifié")
@@ -29,3 +30,15 @@ class Product(Model):
     percentage_discount=fields.IntField()
     offer_expiration=fields.DateField(default=datetime.utcnow)
     image=fields.CharField(max_length=200,null=False,default="default.jpg")
+    business=fields.ForeignKeyField("models.Business",related_name="products")
+
+
+user_pydantic=pydantic_model_creator(User,name="User",exclude=("is_verified",))
+user_pydanticIn=pydantic_model_creator(User,name="UserIn",exclude_readonly=True)
+user_pydanticOut=pydantic_model_creator(User,name="UserOut",exclude=("password",))
+
+business_pydantic=pydantic_model_creator(Business,name="Business")
+business_pydanticIn=pydantic_model_creator(Business,name="BusinessIn",exclude_readonly=True)
+
+product_pydantic=pydantic_model_creator(Product,name="Product")
+product_pydanticIn=pydantic_model_creator(Product,name="ProductIn",exclude=("percentage_discount"))
