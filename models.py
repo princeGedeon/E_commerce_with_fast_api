@@ -4,6 +4,7 @@ from datetime import datetime
 from tortoise import Model, fields
 from pydantic import BaseModel
 from tortoise.contrib.pydantic import pydantic_model_creator
+
 class User(Model):
     id=fields.IntField(pk=True,index=True)
     username=fields.CharField(max_length=20,null=False)
