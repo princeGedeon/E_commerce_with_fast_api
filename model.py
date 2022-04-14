@@ -10,3 +10,9 @@ class User(Model):
     password=fields.CharField(max_length=100,null=False)
     is_verified=fields.BooleanField(default=False)
     join_data=fields.DatetimeField(default=datetime.utcnow())
+
+class Busness(Model):
+    id=fields.IntField(pk=True,index=True)
+    name=fields.CharField(max_length=20,null=False,unique=True)
+    city=fields.CharField(max_length=100,null=False,default="Non spécifié")
+    region=fields.CharField(max_length=100,null=False,default="Non spécifié")
